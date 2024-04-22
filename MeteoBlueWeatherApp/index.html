@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>MeteoBlue Weather App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #1c92d2, #f2fcfe);
+            color: #333;
+        }
+        .weather-card {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+            margin: 20px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+        .weather-card:hover {
+            box-shadow: 0px 0px 20px rgba(0,0,0,0.15);
+        }
+    </style>
+</head>
+<body>
+    <button id="getWeather">Obtener clima</button>
+    <div id="weatherData"></div>
+
+    <script>
+        document.getElementById('getWeather').addEventListener('click', function() {
+            fetch('https://my.meteoblue.com/packages/basic-day?lat=47.5&lon=7.5&asl=300&tz=Europe%2FZurich&apikey=ZtPoSM43nlfCXvqw')
+                .then(response => response.json())
+                .then(data => {
+                    let weatherData = '';
+                    for(let i = 0; i < data.data_day.time.length; i++) {
+                        weatherData += `<div class="weather-card">`;
+                        weatherData += `<h2>Fecha: ${data.data_day.time[i]}</h2>`;
+                        weatherData += `<p>Temperatura máxima: ${data.data_day.temperature_max[i]}°C</p>`;
+                        weatherData += `<p>Temperatura mínima: ${data.data_day.temperature_min[i]}°C</p>`;
+                        weatherData += `<p>Temperatura media: ${data.data_day.temperature_mean[i]}°C</p>`;
+                        weatherData += `<p>Humedad relativa máxima: ${data.data_day.relativehumidity_max[i]}%</p>`;
+                        weatherData += `<p>Velocidad del viento media: ${data.data_day.windspeed_mean[i]} m/s</p>`;
+                        weatherData += `</div>`;
+                    }
+                    document.getElementById('weatherData').innerHTML = weatherData;
+                });
+        });
+    </script>
+</body>
+</html>
